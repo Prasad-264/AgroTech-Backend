@@ -81,8 +81,25 @@ const deleteFarmer = async (req, res) => {
   }
 };
 
+const getFarmerById = async (req, res) => {
+  const { farmerId } = req.params;
+  try {
+    const farmer = await Farmer.findById(farmerId);
+
+    if (!farmer) {
+      return res.status(404).json({ message: "Farmer not found" });
+    }
+
+    res.status(200).json(farmer);
+  } catch (error) {
+    console.error("Error getting farmer:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   addFarmer,
   updateFarmer,
   deleteFarmer,
+  getFarmerById,
 };
