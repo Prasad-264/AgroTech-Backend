@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const cropSchema = new mongoose.Schema({
   farmer: {
     type: mongoose.Schema.Types.ObjectId,
