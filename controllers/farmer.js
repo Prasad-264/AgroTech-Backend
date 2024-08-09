@@ -31,6 +31,32 @@ const addFarmer = async (req, res) => {
   }
 };
 
+const updateFarmer = async (req, res) => {
+  const { farmerId } = req.params;
+  const { name, address, contactNumber, email } = req.body;
+
+  try {
+    const farmer = await Farmer.findByIdAndUpdate(
+      farmerId,
+      { name, address, contactNumber, email },
+      { new: true, runValidators: true }
+    );
+
+    if (!farmer) {
+      return res.status(404).json({ message: "Farmer not found" });
+    }
+
+    res.status(200).json({
+      message: "Farmer updated successfully",
+      farmer,
+    });
+  } catch (error) {
+    console.error("Error updating farmer:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   addFarmer,
+  updateFarmer,
 };
