@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const farmerRoutes = require('./routes/farmerRoutes');
-// const eventRoutes = require('./routes/eventRoutes');
+const cropRoutes = require('./routes/cropRoutes');
 // const friendRoutes = require('./routes/friendRoutes');
 
 dotenv.config();
@@ -25,7 +25,7 @@ connectDB().then(() => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/farmer', farmerRoutes);
-// app.use('/api/event', eventRoutes);
+app.use('/api/crop', cropRoutes);
 // app.use('/api/friend', friendRoutes);
 
 // Health Check
