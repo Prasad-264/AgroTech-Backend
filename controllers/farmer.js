@@ -18,8 +18,11 @@ const addFarmer = async (req, res) => {
     });
     await farmer.save();
 
-    user.farmers.push(farmer._id);
-    await user.save();
+    await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { farmers: farmer._id } },
+      { new: true }
+    );
 
     res.status(201).json({
       message: "Farmer added successfully",
@@ -58,7 +61,7 @@ const updateFarmer = async (req, res) => {
 
 const deleteFarmer = async (req, res) => {
   const { farmerId, userId } = req.params;
-  
+
   try {
     const farmer = await Farmer.findByIdAndDelete(farmerId);
     if (!farmer) {
