@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
-// const userRoutes = require('./routes/userRoutes');
+const farmerRoutes = require('./routes/farmerRoutes');
 // const eventRoutes = require('./routes/eventRoutes');
 // const friendRoutes = require('./routes/friendRoutes');
 
@@ -24,7 +24,7 @@ connectDB().then(() => {
 
 // Routes
 app.use('/api/auth', authRoutes);
-// app.use('/api/user', userRoutes);
+app.use('/api/farmer', farmerRoutes);
 // app.use('/api/event', eventRoutes);
 // app.use('/api/friend', friendRoutes);
 
