@@ -4,22 +4,22 @@ const expenseSchema = new mongoose.Schema({
     ref: "Farmer",
     required: true,
   },
-  crop: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: "Crop", 
-    required: true 
+  crop: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Crop",
+    required: true,
   },
-  expenseType: { 
-    type: String, 
-    required: true 
+  expenseType: {
+    type: String,
+    required: true,
   },
-  cost: { 
-    type: Number, 
-    required: true 
+  cost: {
+    type: Number,
+    required: true,
   },
-  date: { 
-    type: Date, 
-    default: Date.now 
+  date: {
+    type: Date,
+    default: Date.now,
   },
 });
 
