@@ -1,6 +1,7 @@
 const Crop = require("../models/Crop");
 const Farmer = require("../models/Farmer");
 const Pesticide = require("../models/Pesticide");
+const Fertilizer = require("../models/Fertilizer");
 
 const addCrop = async (req, res) => {
   const { farmerId } = req.params;
@@ -207,6 +208,107 @@ const getPesticide = async (req, res) => {
 	}
 }
 
+const addFertilizer = async (req, res) => {
+	const { cropId } = req.params;
+  const { name, manufacturer, quantity, cost, description } = req.body;
+
+  try {
+    const crop = await Crop.findById(cropId);
+
+    if (!crop) {
+      return res.status(404).json({ message: "Crop not found for this farmer" });
+    }
+
+    const fertilizer = new Fertilizer({
+      name,
+      manufacturer,
+      quantity,
+      cost,
+      description,
+    });
+
+    await fertilizer.save();
+
+    await Crop.findByIdAndUpdate(
+      cropId,
+      { $addToSet: { fertilizers: fertilizer._id } },
+      { new: true }
+    );
+
+    res.status(201).json({
+      message: "Fertilizer added successfully",
+      fertilizer,
+    });
+  } catch (error) {
+    console.error("Error adding fertilizer:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const updateFertilizer = async (req, res) => {
+	const { fertilizerId } = req.params;
+  const { name, manufacturer, quantity, cost, description } = req.body;
+
+  try {
+    const fertilizer = await Fertilizer.findByIdAndUpdate(
+      fertilizerId,
+      { name, manufacturer, quantity, cost, description },
+      { new: true, runValidators: true }
+    );
+
+    if (!fertilizer) {
+      return res.status(404).json({ message: "Fertilizer not found" });
+    }
+
+    res.status(200).json({
+      message: "Fertilizer updated successfully",
+      fertilizer,
+    });
+  } catch (error) {
+    console.error("Error updating fertilizer:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteFertilizer = async (req, res) => {
+	const {cropId, fertilizerId } = req.params;
+	try {
+		const fertilizer = await Fertilizer.findByIdAndDelete(fertilizerId);
+
+    if (!fertilizer) {
+      return res.status(404).json({ message: "Fertilizer not found" });
+    }
+
+		await Crop.findByIdAndUpdate(
+			cropId, 
+			{ $pull: { fertilizers: fertilizer._id } }
+		);
+
+    res.status(200).json({
+      message: "Fertilizer deleted successfully",
+    });
+	} catch (error) {
+		console.error("Error getting fertilizer:", error);
+    res.status(500).json({ message: "Server error" });
+	}
+};
+
+const getFertilizer = async (req, res) => {
+	const { fertilizerId } = req.params;
+	try {
+		const fertilizer = await Fertilizer.findById(fertilizerId);
+
+    if (!fertilizer) {
+      return res.status(404).json({ message: "Fertilizer not found" });
+    }
+
+    res.status(200).json(fertilizer);
+	} catch (error) {
+		console.error("Error getting fertilizer:", error);
+    res.status(500).json({ message: "Server error" });
+	}
+};
+
 module.exports = {
   addCrop,
   updateCrop,
@@ -215,5 +317,9 @@ module.exports = {
   addPesticide,
   updatePesticide,
   deletePesticide,
-	getPesticide
+	getPesticide,
+	addFertilizer,
+  updateFertilizer,
+  deleteFertilizer,
+	getFertilizer,
 };
