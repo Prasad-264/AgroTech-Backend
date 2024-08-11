@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 const addFarmer = async (req, res) => {
   const { userId } = req.params;
-  const { name, address, contactNumber, email } = req.body;
+  const { name, address, contactNumber, email, farm_type } = req.body;
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -15,6 +15,7 @@ const addFarmer = async (req, res) => {
       address,
       contactNumber,
       email,
+      farm_type,
     });
     await farmer.save();
 
@@ -36,12 +37,12 @@ const addFarmer = async (req, res) => {
 
 const updateFarmer = async (req, res) => {
   const { farmerId } = req.params;
-  const { name, address, contactNumber, email } = req.body;
+  const { name, address, contactNumber, email, farm_type } = req.body;
 
   try {
     const farmer = await Farmer.findByIdAndUpdate(
       farmerId,
-      { name, address, contactNumber, email },
+      { name, address, contactNumber, email, farm_type },
       { new: true, runValidators: true }
     );
 

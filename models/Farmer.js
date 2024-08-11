@@ -17,6 +17,10 @@ const farmerSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
+  farm_type: { 
+    type: String, 
+    required: true 
+  },
   crops: [{ 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Crop' 
