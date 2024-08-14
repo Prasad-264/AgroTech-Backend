@@ -106,6 +106,25 @@ const getCrop = async (req, res) => {
   }
 };
 
+const getAllCrops = async (req, res) => {
+  const { farmerId } = req.params;
+
+  try {
+    const farmer = await Farmer.findById(farmerId).populate("crops");
+
+    if (!farmer) {
+      return res
+        .status(404)
+        .json({ message: "Farmer not found" });
+    }
+
+    res.status(200).json(farmer.crops);
+  } catch (error) {
+    console.error("Error getting all crops:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const addPesticide = async (req, res) => {
   const { cropId } = req.params;
   const { name, manufacturer, quantity, cost, description } = req.body;
@@ -314,6 +333,7 @@ module.exports = {
   updateCrop,
   deleteCrop,
   getCrop,
+  getAllCrops,
   addPesticide,
   updatePesticide,
   deletePesticide,
