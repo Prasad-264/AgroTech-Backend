@@ -227,6 +227,25 @@ const getPesticide = async (req, res) => {
 	}
 }
 
+const getAllPesticides = async (req, res) => {
+  const { cropId } = req.params;
+
+  try {
+    const crop = await Crop.findById(cropId).populate("pesticides");
+
+    if (!crop) {
+      return res
+        .status(404)
+        .json({ message: "Crop not found" });
+    }
+
+    res.status(200).json(crop.pesticides);
+  } catch (error) {
+    console.error("Error getting crop:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 const addFertilizer = async (req, res) => {
 	const { cropId } = req.params;
   const { name, manufacturer, quantity, cost, description } = req.body;
@@ -328,6 +347,25 @@ const getFertilizer = async (req, res) => {
 	}
 };
 
+const getAllFertilizers = async (req, res) => {
+  const { cropId } = req.params;
+
+  try {
+    const crop = await Crop.findById(cropId).populate("fertilizers");
+
+    if (!crop) {
+      return res
+        .status(404)
+        .json({ message: "Crop not found" });
+    }
+
+    res.status(200).json(crop.fertilizers);
+  } catch (error) {
+    console.error("Error getting crop:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
 module.exports = {
   addCrop,
   updateCrop,
@@ -338,8 +376,10 @@ module.exports = {
   updatePesticide,
   deletePesticide,
 	getPesticide,
+  getAllPesticides,
 	addFertilizer,
   updateFertilizer,
   deleteFertilizer,
 	getFertilizer,
+  getAllFertilizers,
 };
