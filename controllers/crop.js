@@ -366,6 +366,33 @@ const getAllFertilizers = async (req, res) => {
   }
 }
 
+const calculateCropCost = async (cropId) => {
+  try {
+    const crop = await Crop.findById(cropId)
+      .populate('fertilizers')
+      .populate('pesticides');
+
+    if (!crop) {
+      throw new Error('Crop not found');
+    }
+
+    const fertilizerCost = crop.fertilizers.reduce((total, fertilizer) => {
+      return total + fertilizer.cost;
+    }, 0);
+
+    const pesticideCost = crop.pesticides.reduce((total, pesticide) => {
+      return total + pesticide.cost;
+    }, 0);
+
+    const totalCost = fertilizerCost + pesticideCost;
+
+    return totalCost;
+  } catch (error) {
+    console.error('Error calculating crop cost:', error);
+    throw error;
+  }
+}
+
 module.exports = {
   addCrop,
   updateCrop,
@@ -382,4 +409,5 @@ module.exports = {
   deleteFertilizer,
 	getFertilizer,
   getAllFertilizers,
+  calculateCropCost,
 };

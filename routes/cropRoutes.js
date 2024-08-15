@@ -16,6 +16,7 @@ const {
   deleteFertilizer,
 	getFertilizer,
   getAllFertilizers,
+  calculateCropCost,
 } = require('../controllers/crop');
 
 router.post('/:farmerId/add-crop', addCrop);
@@ -35,5 +36,7 @@ router.put('/:fertilizerId/update-fertilizer', updateFertilizer);
 router.delete('/:cropId/:fertilizerId/delete-fertilizer', deleteFertilizer);
 router.get('/:fertilizerId/get-fertilizer', getFertilizer);
 router.get('/:cropId/fertilizers', getAllFertilizers);
+
+router.get('/:cropId/get-cropcost', calculateCropCost);
 
 module.exports = router;
