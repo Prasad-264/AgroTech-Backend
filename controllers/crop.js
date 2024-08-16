@@ -366,14 +366,17 @@ const getAllFertilizers = async (req, res) => {
   }
 }
 
-const calculateCropCost = async (cropId) => {
+const calculateCropCost = async (req, res) => {
+  const { cropId } = req.params;
   try {
     const crop = await Crop.findById(cropId)
       .populate('fertilizers')
       .populate('pesticides');
 
     if (!crop) {
-      throw new Error('Crop not found');
+      return res
+        .status(404)
+        .json({ message: "Crop not found" });
     }
 
     const fertilizerCost = crop.fertilizers.reduce((total, fertilizer) => {
@@ -384,9 +387,11 @@ const calculateCropCost = async (cropId) => {
       return total + pesticide.cost;
     }, 0);
 
-    const totalCost = fertilizerCost + pesticideCost;
+    const totalCost = {
+      cost: fertilizerCost + pesticideCost
+    };
 
-    return totalCost;
+    res.status(200).json(totalCost);
   } catch (error) {
     console.error('Error calculating crop cost:', error);
     throw error;
