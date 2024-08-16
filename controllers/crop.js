@@ -5,7 +5,7 @@ const Fertilizer = require("../models/Fertilizer");
 
 const addCrop = async (req, res) => {
   const { farmerId } = req.params;
-  const { cropName, season, category } = req.body;
+  const { cropName, season, category, seedCost, laborCost } = req.body;
 
   try {
     const farmer = await Farmer.findById(farmerId);
@@ -19,6 +19,8 @@ const addCrop = async (req, res) => {
       cropName,
       season,
       category,
+      seedCost,
+      laborCost,
     });
 
     await crop.save();
@@ -41,12 +43,12 @@ const addCrop = async (req, res) => {
 
 const updateCrop = async (req, res) => {
   const { cropId } = req.params;
-  const { cropName, season, category, fertilizers, pesticides } = req.body;
+  const { cropName, season, category, seedCost, laborCost } = req.body;
 
   try {
     const crop = await Crop.findByIdAndUpdate(
       cropId,
-      { cropName, season, category, fertilizers, pesticides },
+      { cropName, season, category, seedCost, laborCost },
       { new: true, runValidators: true }
     );
 
