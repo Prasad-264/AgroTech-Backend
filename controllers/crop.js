@@ -390,7 +390,7 @@ const calculateCropCost = async (req, res) => {
     }, 0);
 
     const totalCost = {
-      cost: fertilizerCost + pesticideCost
+      cost: fertilizerCost + pesticideCost + crop.seedCost + crop.laborCost 
     };
 
     res.status(200).json(totalCost);
