@@ -18,6 +18,14 @@ const cropSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  seedCost: {
+    type: Number,
+    required: true,
+  },
+  laborCost: {
+    type: Number,
+    required: true,
+  },
   fertilizers: [
     {
       type: mongoose.Schema.Types.ObjectId,
