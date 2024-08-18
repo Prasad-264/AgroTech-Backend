@@ -38,6 +38,12 @@ const cropSchema = new mongoose.Schema({
       ref: "Pesticide",
     },
   ],
+  sales: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Sales',
+    },
+  ],
 });
 
 const Crop = mongoose.model("Crop", cropSchema);
