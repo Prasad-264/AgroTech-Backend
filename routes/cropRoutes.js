@@ -17,6 +17,7 @@ const {
 	getFertilizer,
   getAllFertilizers,
   calculateCropCost,
+  sellCrop,
 } = require('../controllers/crop');
 
 router.post('/:farmerId/add-crop', addCrop);
@@ -38,5 +39,6 @@ router.get('/:fertilizerId/get-fertilizer', getFertilizer);
 router.get('/:cropId/fertilizers', getAllFertilizers);
 
 router.get('/:cropId/get-cropcost', calculateCropCost);
+router.post('/:cropOd/sell-crop', sellCrop);
 
 module.exports = router;

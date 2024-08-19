@@ -2,6 +2,7 @@ const Crop = require("../models/Crop");
 const Farmer = require("../models/Farmer");
 const Pesticide = require("../models/Pesticide");
 const Fertilizer = require("../models/Fertilizer");
+const Sales = require("../models/Sales");
 
 const addCrop = async (req, res) => {
   const { farmerId } = req.params;
@@ -400,6 +401,36 @@ const calculateCropCost = async (req, res) => {
   }
 }
 
+const sellCrop = async (req, res) => {
+  const { cropId } = req.params;
+  try {
+    const { quantitySold, pricePerUnit } = req.body;
+    const crop = await Crop.findById(cropId);
+
+    if (!crop) {
+      return res.status(404).json({ message: 'Crop not found' });
+    }
+
+    const sale = new Sales({
+      crop: cropId,
+      quantitySold,
+      pricePerUnit,
+    });
+    await sale.save();
+
+    await Crop.findByIdAndUpdate(
+      cropId,
+      { $addToSet: { sales: sale._id } },
+      { new: true }
+    );
+
+    res.status(201).json(sale);
+  } catch (error) {
+    console.error("Error sale crop:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   addCrop,
   updateCrop,
@@ -417,4 +448,5 @@ module.exports = {
 	getFertilizer,
   getAllFertilizers,
   calculateCropCost,
+  sellCrop,
 };
