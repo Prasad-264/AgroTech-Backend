@@ -431,6 +431,22 @@ const sellCrop = async (req, res) => {
   }
 };
 
+const getAllTransactions = async (req, res) => {
+  const { cropId } = req.params;
+  try {
+    const crop = await Crop.findById(cropId).populate("sales");
+    
+    if (!crop) {
+      return res.status(404).json({ message: 'Crop not found' });
+    }
+
+    res.status(200).json(crop.sales);
+  } catch (error) {
+    console.error("Error get all transactions:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
 module.exports = {
   addCrop,
   updateCrop,
@@ -449,4 +465,5 @@ module.exports = {
   getAllFertilizers,
   calculateCropCost,
   sellCrop,
+  getAllTransactions,
 };
